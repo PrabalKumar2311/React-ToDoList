@@ -1,0 +1,170 @@
+body{
+  display: flex;
+  justify-content: center;
+}
+
+.to-do-list{
+  flex-direction: column;
+  text-align: center;
+  position: relative;
+  width: 500px;
+}
+
+h1, .task-name, input, .add-button, .delete-button{ 
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-weight: 50;
+}
+
+button{
+  font-size: 1.7rem;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+}
+
+.input-div{
+  display: flex;
+}
+
+input[type="text"]{
+  color: rgb(0, 0, 0);
+  font-size: 1.6rem;
+  font-weight: 50;
+  padding: 10px;
+  border-radius: 30px;
+  border: 1px solid rgb(220, 220, 220);
+  padding-left: 20px;
+  flex: 1;
+}
+
+.add-button{
+  background-color: rgb(41, 147, 41);
+  border-radius: 40px;
+  margin-left: 20px;
+  padding: 10px 30px;  
+
+}
+
+.add-button:hover{
+  background-color: rgb(31, 112, 31);
+}
+
+.add-button:active{
+  background-color: rgb(31, 112, 31);
+  opacity: 80%;
+}
+
+.delete-button, .move-button{
+  padding-right: 0px;
+  padding-left: 10px;
+}
+
+.buttondark{
+  background-color: rgb(79, 79, 79);
+}
+
+.delete-button:hover{
+  color:rgb(33, 33, 33)
+}
+
+ol{
+  padding: 0px;
+  width: 500px;
+  list-style: none;
+}
+
+li{
+  font-size: 1.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.list-cell{
+  padding: 10px 20px;
+  border-radius: 40px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.task-name {
+  font-weight: 500;        
+  white-space: nowrap;     
+  overflow: hidden;       
+  text-overflow: ellipsis; 
+  max-width: 300px;  
+  font-weight: 50;        
+}
+
+.fa-solid ,.fa-trash-can{
+  font-size: 1.3rem;
+  color: rgb(100, 100, 100);
+  background-color: rgb(255, 255, 255);
+  padding: 8px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 30px;
+}
+
+
+
+.fa-solid:active ,.fa-trash-can:active{
+    color: rgb(130, 130, 130);
+}
+
+.textlight{
+  color: #000;
+}
+.textdark{
+  color: #fff;
+}
+
+.textdark::placeholder  { color: #dedede; } 
+
+input.backgrounddark {
+  color: white;
+}
+
+.backgroundlistlight{
+  background-color: rgb(240,240,240);
+}
+
+.backgroundlistdark{
+  background-color: rgb(79, 79, 79);
+}
+
+.backgrounddark{
+  background-color: rgb(48, 51, 56);
+}
+
+.btn-div{
+  position: absolute;
+  right: 80px;
+}
+
+.mode-btnlight{
+  background-color: rgb(255, 255, 255);
+}
+
+.mode-btndark{
+  background-color: rgb(48, 51, 56);
+}
+
+.fa-sun{
+  background-color: rgb(240, 240, 240);
+}
+
+.fa-moon{
+  color: white;
+  background-color: rgb(79, 79, 79);
+}
+
+.modeButton:hover {
+  transform: scale(1.1);
+}
+
