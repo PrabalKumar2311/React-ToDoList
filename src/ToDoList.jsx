@@ -3,9 +3,11 @@ import { useState } from "react";
 
 function ToDoList(props) {
   const [tasks, setTasks] = useState(() => {
-  const saved = localStorage.getItem("todoList");
-  return saved ? JSON.parse(saved) : ["Wake up", "Go to the gym", "Eat proteins"];
-});
+    const saved = localStorage.getItem("todoList");
+    return saved
+      ? JSON.parse(saved)
+      : ["Wake up (Optional)"];
+  });
 
   const [newTask, setNewTask] = useState("");
   const [inputPlaceholder, setInputPlaceholder] = useState("Create a task...");
@@ -28,9 +30,11 @@ function ToDoList(props) {
       }, 2000);
     }
   };
-
   const removeTask = (index) => {
-    setTasks(tasks.filter((_, i) => i !== index));
+    setTasks(tasks.filter((element, i) => i !== index));
+    //.filter takes in 2 parameters element & index, 
+    // index is the index of element we want to filter out.
+    // we rename this to i here to avoid any naming conflicts 
   };
 
   const moveTaskUp = (index) => {
@@ -57,14 +61,14 @@ function ToDoList(props) {
 
   const inputRef = useRef(null);
 
-  useEffect(()=>{
-    localStorage.setItem("todoList", JSON.stringify(tasks))
-  },[tasks])
+  useEffect(() => {
+    localStorage.setItem("todoList", JSON.stringify(tasks));
+  }, [tasks]);
 
   return (
     <>
       <div className="to-do-list">
-      <h1 className={`text${props.mode}`}>To&nbsp;Do&nbsp;List&nbsp;📋</h1>
+        <h1 className={`${props.mode === 'dark' ? 'dark-text' : ''}`}>📋&nbsp;To&nbsp;Do&nbsp;List</h1>
         <div className="input-div">
           <input
             ref={inputRef}
@@ -73,7 +77,12 @@ function ToDoList(props) {
             type="text"
             value={newTask}
             onChange={handleInputChange}
-            className={`background${props.mode} text${props.mode}`}
+            className={`${props.mode === 'dark' ? 'dark-input' : ''}`}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                addTask();
+              }
+            }}
           />
 
           <button className="add-button" onClick={addTask}>
@@ -82,12 +91,12 @@ function ToDoList(props) {
         </div>
 
         <ol>
-          {tasks.map((task, index) => (
+          {tasks.map((task, index) => 
             <li className={`list-cell backgroundlist${props.mode}`} key={index} title={task}>
-              <div className={`text${props.mode} task-name`}>{task}</div>
-              <div>
+              <div className={`${props.mode === 'dark' ? 'dark-text' : ''} task-name`}>{task}</div>
+              <div className="button-div">
                 <button
-                  className={`move-button button${props.mode}`}
+                  className={`move-button move-button${props.mode}`}
                   onClick={() => moveTaskUp(index)}
                   title="Move task up"
                 >
@@ -110,7 +119,7 @@ function ToDoList(props) {
                 </button>
               </div>
             </li>
-          ))}
+          )}
         </ol>
       </div>
     </>

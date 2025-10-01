@@ -9,7 +9,7 @@ function App() {
   });
 
   useEffect(()=>{
-    document.body.style.backgroundColor = mode === "dark" ? "#2f3338" : "white";
+    document.body.style.backgroundColor = mode === "dark" ? "#232629ff" : "white";
   }, [mode])
 
   let handleModeChange = () => {

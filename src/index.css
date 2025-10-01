@@ -24,8 +24,30 @@ button{
   cursor: pointer;
 }
 
+.btn-div{
+
+  position: absolute;
+  z-index: 99;
+  right: 10%;
+  height: 46px;
+  width: 46px;
+}
+
+.btn-div button{
+  height: 46px;
+  width: 46px;
+  border-radius: 50%;
+
+  background-color: rgb(230, 230, 230);
+  
+}
+
 .input-div{
   display: flex;
+}
+
+input{
+ flex: 1;
 }
 
 input[type="text"]{
@@ -56,115 +78,178 @@ input[type="text"]{
   opacity: 80%;
 }
 
-.delete-button, .move-button{
-  padding-right: 0px;
-  padding-left: 10px;
-}
-
-.buttondark{
-  background-color: rgb(79, 79, 79);
-}
-
-.delete-button:hover{
-  color:rgb(33, 33, 33)
-}
-
 ol{
-  padding: 0px;
-  width: 500px;
-  list-style: none;
+  padding: 0;
 }
 
 li{
-  font-size: 1.7rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.list-cell{
-  padding: 10px 20px;
+  background-color: rgb(230, 230, 230);
+  list-style: none;
   border-radius: 40px;
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.task-name {
-  font-weight: 500;        
-  white-space: nowrap;     
-  overflow: hidden;       
-  text-overflow: ellipsis; 
-  max-width: 300px;  
-  font-weight: 50;        
-}
-
-.fa-solid ,.fa-trash-can{
-  font-size: 1.3rem;
-  color: rgb(100, 100, 100);
-  background-color: rgb(255, 255, 255);
-  padding: 8px;
+  width: 100%;
   padding-top: 10px;
   padding-bottom: 10px;
-  border-radius: 30px;
+  margin-bottom: 14px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  font-size: 1.5rem;
 }
 
-
-
-.fa-solid:active ,.fa-trash-can:active{
-    color: rgb(130, 130, 130);
+.task-name{
+  text-align: left;
+  flex: 1;
+  word-break: break-word;
+  padding-left: 30px;
 }
 
-.textlight{
-  color: #000;
-}
-.textdark{
-  color: #fff;
+.button-div{
+  display: flex;
+  margin-right:6px;
+  flex-shrink: 0;
 }
 
-.textdark::placeholder  { color: #dedede; } 
+.button-div button{
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: rgb(129, 129, 129);
+  background-color: white;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  margin-left: 6px;
+  margin-right: 6px;
 
-input.backgrounddark {
+  border-radius: 50%;
+
+}
+
+/* MODE CSS */
+
+
+.dark-text {
   color: white;
 }
 
-.backgroundlistlight{
-  background-color: rgb(240,240,240);
+.dark-input, input[type="text"].dark-input{
+  color: white;
+  background-color: rgb(35, 38, 41);
 }
 
-.backgroundlistdark{
-  background-color: rgb(79, 79, 79);
+.dark-input::placeholder {
+  color: rgb(242, 242, 242);
 }
 
-.backgrounddark{
-  background-color: rgb(48, 51, 56);
-}
-
-.btn-div{
-  position: absolute;
-  right: 80px;
-}
+/* MODE BUTTON */
 
 .mode-btnlight{
-  background-color: rgb(255, 255, 255);
+  font-size: 1.5rem;
+  padding: 0;
+  padding-left: 0px;
+  transform: rotate(25deg);
+  color: rgb(255, 170, 0);
+
+  transition: transform 0.4s ease-in-out, color 0.2s ease-in-out;
+  display: inline-block;
+  
 }
 
 .mode-btndark{
-  background-color: rgb(48, 51, 56);
+  font-size: 1.5rem;
+  padding: 0;
+  padding-left: 2px;
+  color: rgb(58, 21, 153);
+
+  transition: transform 0.4s ease-in-out, color 0.2s ease-in-out;
+  display: inline-block;
+  transform: rotate(-15deg);
+
 }
 
-.fa-sun{
-  background-color: rgb(240, 240, 240);
+.backgroundlistdark{
+  background-color: #2f3338;
 }
 
-.fa-moon{
-  color: white;
-  background-color: rgb(79, 79, 79);
+.delete-button, .move-button{
+  transition: color 0.2s ease-in-out;
 }
 
-.modeButton:hover {
-  transform: scale(1.1);
+/* MOVE BUTTON */
+
+.move-button:hover{
+  color: black;
 }
 
+.delete-button:hover{
+  color: red;
+}
+
+/* MEDIA QUERIES */
+
+/* MOBILE: up to 480px */
+@media (max-width: 480px) {
+
+  .to-do-list {
+    width: 100%;
+    display: block;   /* ensures it respects width */
+    box-sizing: border-box;
+  }
+
+  input[type="text"] {
+    font-size: 1.4rem;
+    padding: 8px;
+    padding-left: 20px;
+  }
+
+  .add-button {
+    font-size: 1.5rem;
+    padding: 8px 16px;
+    margin-left: 10px;
+  }
+
+  li {
+    font-size: 1.3rem;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  .button-div button {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+    margin-left: 4px;
+    margin-right: 4px;
+  }
+}
+
+/* TABLETS: 481px – 768px */
+@media (min-width: 481px) and (max-width: 500px) {
+  .to-do-list {
+    width: 100%;
+  }
+
+  input[type="text"] {
+    font-size: 1.5rem;
+    padding: 9px;
+  }
+
+  .add-button {
+    font-size: 1.6rem;
+    padding: 10px 20px;
+    margin-left: 15px;
+  }
+
+  li {
+    font-size: 1.4rem;
+    padding-top: 9px;
+    padding-bottom: 9px;
+  }
+
+  .button-div button {
+    width: 44px;
+    height: 44px;
+    font-size: 1.3rem;
+  }
+}
