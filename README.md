@@ -1,5 +1,17 @@
 # ToDo List
 
-View the project: https://prioritize-todo-list.netlify.app/
+View the project: https://my-todolist-tro.netlify.app
 
-Recommended browser: Chrome
+Future enhancements :
+
+Use database 
+
+Make login
+
+Sync dark mode to system settings
+
+.....
+
+Timer for todos
+
+Notifications for todos
