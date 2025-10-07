@@ -28,21 +28,6 @@ function App() {
 
   return (
     <div>
-      <div className="btn-div">
-        <button
-          /* add moon-btn only in dark mode */
-          className={`mode-btn${mode}`}
-          onClick={handleModeChange}
-          aria-label={
-            mode === "light" ? "Switch to dark mode" : "Switch to light mode"
-          }
-        >
-          <i
-            className={`fa-solid ${mode === "light" ? "fa-sun" : "fa-moon"}`}
-          ></i>
-        </button>
-      </div>
-
       <ToDoList mode={mode} handleModeChange={handleModeChange}></ToDoList>
     </div>
   );

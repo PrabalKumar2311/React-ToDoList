@@ -1,12 +1,10 @@
-import React, { useEffect, useRef } from "react";
-import { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 
 function ToDoList(props) {
   const [tasks, setTasks] = useState(() => {
     const saved = localStorage.getItem("todoList");
-    return saved
-      ? JSON.parse(saved)
-      : ["Wake up"];
+    return saved ? JSON.parse(saved) : ["Wake up"];
   });
 
   const [newTask, setNewTask] = useState("");
@@ -32,9 +30,9 @@ function ToDoList(props) {
   };
   const removeTask = (index) => {
     setTasks(tasks.filter((element, i) => i !== index));
-    //.filter takes in 2 parameters element & index, 
+    //.filter takes in 2 parameters element & index,
     // index is the index of element we want to filter out.
-    // we rename this to i here to avoid any naming conflicts 
+    // we rename this to i here to avoid any naming conflicts
   };
 
   const moveTaskUp = (index) => {
@@ -65,10 +63,57 @@ function ToDoList(props) {
     localStorage.setItem("todoList", JSON.stringify(tasks));
   }, [tasks]);
 
+  // DRAG LOGIC
+  const dragTask = useRef(0);
+  const draggedOverTask = useRef(0);
+
+  function handleSort() {
+    const taskClone = [...tasks];
+    const temp = taskClone[dragTask.current];
+    taskClone[dragTask.current] = taskClone[draggedOverTask.current];
+    taskClone[draggedOverTask.current] = temp;
+    setTasks(taskClone);
+  }
+
+  // EDIT BUTTON
+
+  const [isEditMode, setIsEditMode] = useState(false);
+
+  function toggleEdit(){
+    setIsEditMode(!isEditMode);
+  }
+
   return (
     <>
       <div className="to-do-list">
-        <h1 className={`${props.mode === 'dark' ? 'dark-text' : ''}`}>📋&nbsp;To&nbsp;Do&nbsp;List</h1>
+        <div className="heading-div">
+
+          <button className={isEditMode? "edit-btn-pressed" : "edit-btn"} onClick={toggleEdit}>
+            <i className="fa-solid fa-bars"></i>
+          </button>
+
+          <h1 className={`${props.mode === "dark" ? "dark-text" : ""}`}>
+            📋&nbsp;To&nbsp;Do&nbsp;List
+          </h1>
+
+          <div className="btn-div">
+
+          <button
+          /* add moon-btn only in dark mode */
+          className={`mode-btn${props.mode}`}
+          onClick={props.handleModeChange}
+          aria-label={
+            props.mode === "light" ? "Switch to dark mode" : "Switch to light mode"
+          }
+        >
+          <i
+            className={`fa-solid ${props.mode === "light" ? "fa-sun" : "fa-moon"}`}
+          ></i>
+        </button>
+        </div>
+          
+        </div>
+
         <div className="input-div">
           <input
             ref={inputRef}
@@ -77,7 +122,7 @@ function ToDoList(props) {
             type="text"
             value={newTask}
             onChange={handleInputChange}
-            className={`${props.mode === 'dark' ? 'dark-input' : ''}`}
+            className={`${props.mode === "dark" ? "dark-input" : ""}`}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 addTask();
@@ -91,35 +136,63 @@ function ToDoList(props) {
         </div>
 
         <ol>
-          {tasks.map((task, index) => 
-            <li className={`list-cell backgroundlist${props.mode}`} key={index} title={task}>
-              <div className={`${props.mode === 'dark' ? 'dark-text' : ''} task-name`}>{task}</div>
-              <div className="button-div">
-                <button
-                  className={`move-button move-button${props.mode}`}
-                  onClick={() => moveTaskUp(index)}
-                  title="Move task up"
-                >
-                  <i className="fa-solid fa-arrow-up"></i>
-                </button>
-
-                <button
-                  className={`move-button button${props.mode}`}
-                  onClick={() => moveTaskDown(index)}
-                  title="Move task down"
-                >
-                  <i className="fa-solid fa-arrow-down"></i>
-                </button>
-                <button
-                  className={`delete-button button${props.mode}`}
-                  onClick={() => removeTask(index)}
-                  title="Delete this task"
-                >
-                  <i className="fa-solid fa-trash-can"></i>
-                </button>
+          {tasks.map((task, index) => (
+            <motion.li
+              className={`list-cell backgroundlist${props.mode}`}
+              key={index}
+              title={task}
+              draggable
+              onDragStart={() => (dragTask.current = index)}
+              onDragEnter={() => (draggedOverTask.current = index)}
+              onDragEnd={handleSort}
+              onDragOver={(e) => e.preventDefault()}
+              // Drag animation
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+            >
+              <div
+                className={`${
+                  props.mode === "dark" ? "dark-text" : ""
+                } task-name`}
+              >
+                {task}
               </div>
-            </li>
-          )}
+              <div className="button-div">
+                {isEditMode ? (
+                  <>
+                    <button
+                      className={`move-button move-button${props.mode}`}
+                      onClick={() => moveTaskUp(index)}
+                      title="Move task up"
+                    >
+                      <i className="fa-solid fa-arrow-up"></i>
+                    </button>
+
+                    <button
+                      className={`move-button button${props.mode}`}
+                      onClick={() => moveTaskDown(index)}
+                      title="Move task down"
+                    >
+                      <i className="fa-solid fa-arrow-down"></i>
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button className="edit-button">
+                      <i className="fa-regular fa-pen-to-square"></i>
+                    </button>
+
+                    <button
+                      className={`delete-button button${props.mode}`}
+                      onClick={() => removeTask(index)}
+                      title="Delete this task"
+                    >
+                      <i className="fa-regular fa-trash-can"></i>
+                    </button>
+                  </>
+                )}
+              </div>
+            </motion.li>
+          ))}
         </ol>
       </div>
     </>
