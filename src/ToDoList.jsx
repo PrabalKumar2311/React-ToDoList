@@ -6,7 +6,7 @@ function ToDoList(props) {
     const saved = localStorage.getItem("todoList");
     return saved
       ? JSON.parse(saved)
-      : ["Wake up (Optional)"];
+      : ["Wake up"];
   });
 
   const [newTask, setNewTask] = useState("");
