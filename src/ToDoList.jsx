@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 function ToDoList(props) {
   const [tasks, setTasks] = useState(() => {
@@ -79,7 +79,7 @@ function ToDoList(props) {
 
   const [isEditMode, setIsEditMode] = useState(false);
 
-  function toggleEdit(){
+  function toggleEdit() {
     setIsEditMode(!isEditMode);
   }
 
@@ -87,8 +87,10 @@ function ToDoList(props) {
     <>
       <div className="to-do-list">
         <div className="heading-div">
-
-          <button className={isEditMode? "edit-btn-pressed" : "edit-btn"} onClick={toggleEdit}>
+          <button
+            className={isEditMode ? "edit-btn-pressed" : "edit-btn"}
+            onClick={toggleEdit}
+          >
             <i className="fa-solid fa-bars"></i>
           </button>
 
@@ -97,21 +99,23 @@ function ToDoList(props) {
           </h1>
 
           <div className="btn-div">
-
-          <button
-          /* add moon-btn only in dark mode */
-          className={`mode-btn${props.mode}`}
-          onClick={props.handleModeChange}
-          aria-label={
-            props.mode === "light" ? "Switch to dark mode" : "Switch to light mode"
-          }
-        >
-          <i
-            className={`fa-solid ${props.mode === "light" ? "fa-sun" : "fa-moon"}`}
-          ></i>
-        </button>
-        </div>
-          
+            <button
+              /* add moon-btn only in dark mode */
+              className={`mode-btn${props.mode}`}
+              onClick={props.handleModeChange}
+              aria-label={
+                props.mode === "light"
+                  ? "Switch to dark mode"
+                  : "Switch to light mode"
+              }
+            >
+              <i
+                className={`fa-solid ${
+                  props.mode === "light" ? "fa-sun" : "fa-moon"
+                }`}
+              ></i>
+            </button>
+          </div>
         </div>
 
         <div className="input-div">
@@ -157,39 +161,55 @@ function ToDoList(props) {
                 {task}
               </div>
               <div className="button-div">
-                {isEditMode ? (
-                  <>
-                    <button
-                      className={`move-button move-button${props.mode}`}
-                      onClick={() => moveTaskUp(index)}
-                      title="Move task up"
+                <AnimatePresence mode="wait">
+                  {isEditMode ? (
+                    <motion.div
+                      key="move-buttons"
+                      initial={{ opacity: 0, x: 30 }} // start off to the right
+                      animate={{ opacity: 1, x: 0 }} // slide in to place
+                      exit={{ opacity: 0, x: 30 }} // exit back to the right
+                      transition={{ duration: 0.3 }}
+                      className="button-group"
                     >
-                      <i className="fa-solid fa-arrow-up"></i>
-                    </button>
+                      <button
+                        className={`move-button move-button${props.mode}`}
+                        onClick={() => moveTaskUp(index)}
+                        title="Move task up"
+                      >
+                        <i className="fa-solid fa-arrow-up"></i>
+                      </button>
 
-                    <button
-                      className={`move-button button${props.mode}`}
-                      onClick={() => moveTaskDown(index)}
-                      title="Move task down"
+                      <button
+                        className={`move-button button${props.mode}`}
+                        onClick={() => moveTaskDown(index)}
+                        title="Move task down"
+                      >
+                        <i className="fa-solid fa-arrow-down"></i>
+                      </button>
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="edit-delete-buttons"
+                      initial={{ opacity: 0, x: 30 }} // start off to the right
+                      animate={{ opacity: 1, x: 0 }} // slide in to place
+                      exit={{ opacity: 0, x: 30 }} // exit back to the right
+                      transition={{ duration: 0.3 }}
+                      className="button-group"
                     >
-                      <i className="fa-solid fa-arrow-down"></i>
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <button className="edit-button">
-                      <i className="fa-regular fa-pen-to-square"></i>
-                    </button>
+                      <button className="edit-button">
+                        <i className="fa-regular fa-pen-to-square"></i>
+                      </button>
 
-                    <button
-                      className={`delete-button button${props.mode}`}
-                      onClick={() => removeTask(index)}
-                      title="Delete this task"
-                    >
-                      <i className="fa-regular fa-trash-can"></i>
-                    </button>
-                  </>
-                )}
+                      <button
+                        className={`delete-button button${props.mode}`}
+                        onClick={() => removeTask(index)}
+                        title="Delete this task"
+                      >
+                        <i className="fa-regular fa-trash-can"></i>
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </motion.li>
           ))}
