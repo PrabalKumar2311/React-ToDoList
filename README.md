@@ -4,6 +4,8 @@ View the project: https://my-todolist-tro.netlify.app
 
 Future enhancements :
 
+Make saperate component for button
+
 To do update
 
 drag to reorder
