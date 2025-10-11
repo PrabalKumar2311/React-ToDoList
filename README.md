@@ -8,13 +8,13 @@ Make saperate component for button
 
 To do update
 
-drag to reorder
+drag to reorder ✅
 
 Use database 
 
-Make login
+Make login 
 
-Sync dark mode to system settings
+Sync dark mode to system settings 
 
 .....
 
