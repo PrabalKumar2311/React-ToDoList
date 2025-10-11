@@ -1,6 +1,6 @@
 # ToDo List
 
-View the project: https://my-todolist-tro.netlify.app
+View the project: https://todo-list-tro.netlify.app/
 
 Future enhancements :
 
