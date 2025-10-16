@@ -6,7 +6,7 @@ Future enhancements :
 
 Make saperate component for button
 
-To do update
+To do update ✅
 
 drag to reorder ✅
 
