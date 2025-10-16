@@ -10,6 +10,7 @@ function ToDoList(props) {
   const [newTask, setNewTask] = useState("");
   const [inputPlaceholder, setInputPlaceholder] = useState("Create a task...");
   const inputRef = useRef(null);
+  const editInputRef = useRef(null);
 
   // 🔹 Add task
   const addTask = () => {
@@ -66,6 +67,7 @@ function ToDoList(props) {
   const [isEditMode, setIsEditMode] = useState(false);
   function toggleControls() {
     setIsEditMode(!isEditMode);
+    setEditingId(null)
   }
 
   // 🔹 Editing logic
@@ -91,6 +93,14 @@ function ToDoList(props) {
     setEditingId(null);
     setEditingValue("");
   };
+
+
+  useEffect(() => {
+  if (editingId !== null && editInputRef.current) {
+    editInputRef.current.focus();
+  }
+}, [editingId]);
+
 
   return (
     <>
@@ -161,11 +171,15 @@ function ToDoList(props) {
                 } task-name`}
               >
                 {editingId === task.id ? (
+                  <div className="input-div edit-input">
                   <input
-                    className={`${props.mode === "dark" ? "dark-input" : ""}`}
+                  ref={editInputRef}
+                    className={`edit-task-input ${props.mode === "dark" ? "dark-input" : ""}`}
                     value={editingValue}
                     onChange={(e) => setEditingValue(e.target.value)}
                   />
+
+                  </div>
                 ) : (
                   <>{task.name}</>
                 )}
@@ -213,10 +227,10 @@ function ToDoList(props) {
                       {editingId === task.id ? (
                         <>
                           <button onClick={saveEdit} title="Save">
-                            ✅
+                            <i className="fa-solid fa-check" style={{color: "#00bc51ff"}}></i>
                           </button>
                           <button onClick={cancelEdit} title="Cancel">
-                            ❌
+                            <i className="fa-solid fa-xmark" style={{color: "#fa0000"}}></i>
                           </button>
                         </>
                       ) : (

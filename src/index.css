@@ -232,6 +232,34 @@ button.delete-button {
   color: rgba(255, 0, 0, 0.614); 
 }
 
+.edit-input {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.edit-task-input {
+  width: 100%;
+  font-size: 1.5rem;
+  font-weight: 50;
+  padding: 10px 20px;
+  border-radius: 30px;
+  border: 1px solid rgb(220, 220, 220);
+  outline: none;
+  box-sizing: border-box;
+}
+
+
+
+.dark-input, input[type="text"].dark-input {
+  color: white;
+  background-color: rgb(35, 38, 41);
+}
+
+.dark-input::placeholder {
+  color: rgb(242, 242, 242);
+}
+
 /* MEDIA QUERIES */
 
 /* MOBILE: up to 480px */
