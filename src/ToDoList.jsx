@@ -4,66 +4,53 @@ import { motion, AnimatePresence } from "framer-motion";
 function ToDoList(props) {
   const [tasks, setTasks] = useState(() => {
     const saved = localStorage.getItem("todoList");
-    return saved ? JSON.parse(saved) : ["Wake up"];
+    return saved ? JSON.parse(saved) : [{ id: 1, name: "Wake up" }];
   });
 
   const [newTask, setNewTask] = useState("");
   const [inputPlaceholder, setInputPlaceholder] = useState("Create a task...");
+  const inputRef = useRef(null);
 
-  const handleInputChange = (event) => {
-    setNewTask(event.target.value);
-  };
-
+  // 🔹 Add task
   const addTask = () => {
     if (newTask.trim() !== "") {
-      setTasks((t) => [...t, newTask]);
+      setTasks((t) => [...t, { id: Date.now(), name: newTask }]);
       setNewTask("");
     } else {
       setInputPlaceholder("Please enter a task...");
       inputRef.current.focus();
-
-      setTimeout(() => {
-        setInputPlaceholder("Create a task...");
-        // input.blur();
-      }, 2000);
+      setTimeout(() => setInputPlaceholder("Create a task..."), 2000);
     }
   };
+
+  // 🔹 Delete task
   const removeTask = (index) => {
-    setTasks(tasks.filter((element, i) => i !== index));
-    //.filter takes in 2 parameters element & index,
-    // index is the index of element we want to filter out.
-    // we rename this to i here to avoid any naming conflicts
+    setTasks(tasks.filter((_, i) => i !== index));
   };
 
+  // 🔹 Move task up/down
   const moveTaskUp = (index) => {
     if (index > 0) {
-      const updatedTasks = [...tasks];
-      [updatedTasks[index], updatedTasks[index - 1]] = [
-        updatedTasks[index - 1],
-        updatedTasks[index],
-      ];
-      setTasks(updatedTasks);
+      const updated = [...tasks];
+      [updated[index], updated[index - 1]] = [updated[index - 1], updated[index]];
+      setTasks(updated);
     }
   };
 
   const moveTaskDown = (index) => {
     if (index < tasks.length - 1) {
-      const updatedTasks = [...tasks];
-      [updatedTasks[index], updatedTasks[index + 1]] = [
-        updatedTasks[index + 1],
-        updatedTasks[index],
-      ];
-      setTasks(updatedTasks);
+      const updated = [...tasks];
+      [updated[index], updated[index + 1]] = [updated[index + 1], updated[index]];
+      setTasks(updated);
     }
   };
 
-  const inputRef = useRef(null);
-
+  // 🔹 Save tasks to localStorage
   useEffect(() => {
     localStorage.setItem("todoList", JSON.stringify(tasks));
   }, [tasks]);
 
-  // DRAG LOGIC
+  // 🔹 Drag logic
   const dragTask = useRef(0);
   const draggedOverTask = useRef(0);
 
@@ -75,13 +62,35 @@ function ToDoList(props) {
     setTasks(taskClone);
   }
 
-  // EDIT BUTTON
-
+  // 🔹 Edit mode toggle for moving buttons
   const [isEditMode, setIsEditMode] = useState(false);
-
-  function toggleEdit() {
+  function toggleControls() {
     setIsEditMode(!isEditMode);
   }
+
+  // 🔹 Editing logic
+  const [editingId, setEditingId] = useState(null);
+  const [editingValue, setEditingValue] = useState("");
+
+  const startEditing = (item) => {
+    setEditingId(item.id);
+    setEditingValue(item.name);
+  };
+
+  const saveEdit = () => {
+    setTasks(
+      tasks.map((task) =>
+        task.id === editingId ? { ...task, name: editingValue } : task
+      )
+    );
+    setEditingId(null);
+    setEditingValue("");
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditingValue("");
+  };
 
   return (
     <>
@@ -89,7 +98,7 @@ function ToDoList(props) {
         <div className="heading-div">
           <button
             className={isEditMode ? "edit-btn-pressed" : "edit-btn"}
-            onClick={toggleEdit}
+            onClick={toggleControls}
           >
             <i className="fa-solid fa-bars"></i>
           </button>
@@ -100,14 +109,8 @@ function ToDoList(props) {
 
           <div className="btn-div">
             <button
-              /* add moon-btn only in dark mode */
               className={`mode-btn${props.mode}`}
               onClick={props.handleModeChange}
-              aria-label={
-                props.mode === "light"
-                  ? "Switch to dark mode"
-                  : "Switch to light mode"
-              }
             >
               <i
                 className={`fa-solid ${
@@ -118,6 +121,7 @@ function ToDoList(props) {
           </div>
         </div>
 
+        {/* Input Field */}
         <div className="input-div">
           <input
             ref={inputRef}
@@ -125,12 +129,10 @@ function ToDoList(props) {
             placeholder={inputPlaceholder}
             type="text"
             value={newTask}
-            onChange={handleInputChange}
+            onChange={(e) => setNewTask(e.target.value)}
             className={`${props.mode === "dark" ? "dark-input" : ""}`}
             onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                addTask();
-              }
+              if (e.key === "Enter") addTask();
             }}
           />
 
@@ -139,35 +141,45 @@ function ToDoList(props) {
           </button>
         </div>
 
+        {/* Task List */}
         <ol>
           {tasks.map((task, index) => (
             <motion.li
               className={`list-cell backgroundlist${props.mode}`}
-              key={index}
-              title={task}
+              key={task.id}
               draggable
               onDragStart={() => (dragTask.current = index)}
               onDragEnter={() => (draggedOverTask.current = index)}
               onDragEnd={handleSort}
               onDragOver={(e) => e.preventDefault()}
-              // Drag animation
               transition={{ type: "spring", stiffness: 300, damping: 25 }}
             >
+              {/* Task Text / Input */}
               <div
                 className={`${
                   props.mode === "dark" ? "dark-text" : ""
                 } task-name`}
               >
-                {task}
+                {editingId === task.id ? (
+                  <input
+                    className={`${props.mode === "dark" ? "dark-input" : ""}`}
+                    value={editingValue}
+                    onChange={(e) => setEditingValue(e.target.value)}
+                  />
+                ) : (
+                  <>{task.name}</>
+                )}
               </div>
+
+              {/* Buttons Section */}
               <div className="button-div">
                 <AnimatePresence mode="wait">
-                  {isEditMode ? (
+                  {isEditMode && (
                     <motion.div
                       key="move-buttons"
-                      initial={{ opacity: 0, x: 30 }} // start off to the right
-                      animate={{ opacity: 1, x: 0 }} // slide in to place
-                      exit={{ opacity: 0, x: 30 }} // exit back to the right
+                      initial={{ opacity: 0, x: 30 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 30 }}
                       transition={{ duration: 0.3 }}
                       className="button-group"
                     >
@@ -187,26 +199,45 @@ function ToDoList(props) {
                         <i className="fa-solid fa-arrow-down"></i>
                       </button>
                     </motion.div>
-                  ) : (
+                  )}
+
+                  {!isEditMode && (
                     <motion.div
                       key="edit-delete-buttons"
-                      initial={{ opacity: 0, x: 30 }} // start off to the right
-                      animate={{ opacity: 1, x: 0 }} // slide in to place
-                      exit={{ opacity: 0, x: 30 }} // exit back to the right
+                      initial={{ opacity: 0, x: 30 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 30 }}
                       transition={{ duration: 0.3 }}
                       className="button-group"
                     >
-                      <button className="edit-button">
-                        <i className="fa-regular fa-pen-to-square"></i>
-                      </button>
+                      {editingId === task.id ? (
+                        <>
+                          <button onClick={saveEdit} title="Save">
+                            ✅
+                          </button>
+                          <button onClick={cancelEdit} title="Cancel">
+                            ❌
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            className="edit-button"
+                            onClick={() => startEditing(task)}
+                            title="Edit task"
+                          >
+                            <i className="fa-regular fa-pen-to-square"></i>
+                          </button>
 
-                      <button
-                        className={`delete-button button${props.mode}`}
-                        onClick={() => removeTask(index)}
-                        title="Delete this task"
-                      >
-                        <i className="fa-regular fa-trash-can"></i>
-                      </button>
+                          <button
+                            className={`delete-button button${props.mode}`}
+                            onClick={() => removeTask(index)}
+                            title="Delete this task"
+                          >
+                            <i className="fa-regular fa-trash-can"></i>
+                          </button>
+                        </>
+                      )}
                     </motion.div>
                   )}
                 </AnimatePresence>

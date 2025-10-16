@@ -220,16 +220,16 @@ button.edit-button {
   color: rgb(0, 133, 250);
 }
 
-.edit-button:hover{
-  color: rgba(0, 133, 250, 0.824);
+.edit-button:active{
+  color: rgba(0, 133, 250, 0.652);
 }
 
 button.delete-button {
   color: red;   
 }
 
-.delete-button:hover{
-  color: rgba(255, 0, 0, 0.798); 
+.delete-button:active{
+  color: rgba(255, 0, 0, 0.614); 
 }
 
 /* MEDIA QUERIES */
